@@ -1,5 +1,7 @@
 # rpi-wifi-setup
 
+[![Travis](https://img.shields.io/travis/nfischer/rpi-wifi-setup.svg?style=flat-square)](https://travis-ci.org/nfischer/rpi-wifi-setup)
+
 ## Installation
 
 ```
