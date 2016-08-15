@@ -25,7 +25,8 @@
   "license": "MIT",
   "dependencies": {},
   "files": [
-    "index.js"
+    "index.js",
+    "scripts/init-install.js"
   ],
   "devDependencies": {
     "mocha": "^3.0.2",
