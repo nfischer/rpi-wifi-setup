@@ -55,13 +55,6 @@ describe('rpi-wifi-setup', function() {
       output.password.should.equal(configObj2.password);
     });
 
-    it('can read plain text', function() {
-      fs.writeFileSync(testSimple, configObj.ssid + '\n' + configObj.password + '\n');
-      var output = rpiWifi.getWifiInfo(testSimple);
-      output.ssid.should.equal(configObj.ssid);
-      output.password.should.equal(configObj.password);
-    });
-
     it('cannot read missing file', function() {
       (function () {
         rpiWifi.getWifiInfo('fakeFileName.json');
@@ -84,7 +77,7 @@ describe('rpi-wifi-setup', function() {
       }).should.throw('Malformatted config file');
     });
 
-    it('cannot read empty plain text', function() {
+    it('cannot read empty JSON', function() {
       fs.writeFileSync(testSimple, '');
       (function () {
         rpiWifi.getWifiInfo(testSimple);
