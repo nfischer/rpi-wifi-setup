@@ -6,6 +6,9 @@
   "scripts": {
     "test": "mocha"
   },
+  "bin": {
+    "rpi-wifi-setup": "index.js"
+  },
   "keywords": [
     "raspberry",
     "pi",
@@ -20,15 +23,13 @@
   },
   "license": "MIT",
   "dependencies": {
-    "wifi-control": "^2.0.0"
   },
+  "files": [
+    "index.js"
+  ],
   "devDependencies": {
     "mocha": "^3.0.2",
     "rimraf": "^2.5.4",
     "should": "^11.1.0"
-  },
-  "engines": {
-    "node": ">=0.10.0",
-    "iojs": "*"
   }
 }

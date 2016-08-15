@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
-var wifi = require('wifi-control');
-var child_process = require('child_process');
+var exec = require('child_process').exec;
 var path = require('path');
 var fs = require('fs');
 var JSON_NAME = 'network.json';
+var SUPPLICANT_PATH = path.join('/etc', 'wpa_supplicant', 'wpa_supplicant.conf');
+var MAX_WAIT_TIME = 20000;
 
 function getWifiInfo(file) {
   var info;
@@ -41,6 +42,11 @@ function getWifiInfo(file) {
 }
 exports.getWifiInfo = getWifiInfo;
 
+function getHeadOfConf(filePath) {
+  return fs.readFileSync(filePath).toString().replace(/network(.|\n)*$/, '');
+}
+exports.getHeadOfConf = getHeadOfConf;
+
 function main() {
   // Find the USB flash drive
   var network;
@@ -49,14 +55,12 @@ function main() {
   fs.readdirSync(root).forEach(function (user) {
     try {
       fs.readdirSync(path.join(root, user)).forEach(function (drive) {
-        try {
-          network = getWifiInfo(path.join(root, user, drive, JSON_NAME));
-        } catch (e) {
-          // Nothing
-        }
+        network = getWifiInfo(path.join(root, user, drive, JSON_NAME));
       });
-    } catch (e2) {
+    } catch (e) {
       // Try, try again
+      if (e.toString() === 'Error: Unable to read config file')
+        throw e;
     }
   });
 
@@ -68,13 +72,42 @@ function main() {
   // Allow user to write either "ssid" or "name"
   console.log('Attempting to connect to ' + JSON.stringify(network.name));
 
-  // Initialize the wifi module
-  wifi.init();
+  var templateConf = getHeadOfConf(SUPPLICANT_PATH);
 
-  wifi.connectToAP(network, function (err, response) {
-    if (err) console.error(err);
-    console.log(response.msg || response);
-    process.exit(err ? 1 : 0);
+  var networkString = 'network={\n' +
+    '\tssid=' + JSON.stringify(network.name) + '\n' +
+    '\tpsk=' + JSON.stringify(network.password) + '\n' +
+    '}\n';
+
+  fs.writeFileSync(SUPPLICANT_PATH, templateConf + networkString);
+
+  console.log('Restarting network connection');
+  exec('ifdown wlan0 && sleep 1 && ifup wlan0', function (err, response) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    } else {
+      function exitIfReady() {
+        exec('hostname -I', function (err, output) {
+          if (output.trimRight()) {
+            // Exit as soon as this succeeds
+            process.exit(0);
+          }
+        });
+      }
+
+      // Every 2 seconds, check to see if it succeeded
+      for (var k=2000; k < MAX_WAIT_TIME; k+=2000) {
+        setTimeout(function () {
+          exitIfReady();
+        }, k);
+      }
+
+      setTimeout(function () {
+        console.error('Unable to get an IP address');
+        process.exit(1);
+      }, MAX_WAIT_TIME);
+    }
   });
 }
 
