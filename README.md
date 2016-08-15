@@ -5,7 +5,8 @@
 ## Installation
 
 ```
-$ npm install -g rpi-wifi-setup
+$ sudo npm install -g rpi-wifi-setup
+$ sudo rpi-wifi-setup install
 ```
 
 ## Description
@@ -13,7 +14,18 @@ $ npm install -g rpi-wifi-setup
 This npm package is designed to be installed globally on your Raspberry Pi to
 allow you to easily connect to Wifi Networks in a headless state.
 
-Simply install this module globally, and boot up your pi with a flash drive connected. The flash drive should have a file at the top level named **`network.json`**that looks like this:
+Simply install this module globally with the above steps, and boot up your pi
+while a flash drive is connected. The flash drive should have a file at the top
+level named **`network.json`**that looks like this:
+
+```
+/media
+  /username
+    /flashDriveName
+      network.json
+```
+
+Inside `network.json`:
 
 ```json
 {

@@ -1,4 +1,5 @@
 node_modules/
+rpi-wifi-setup-rc-script.sh
 
 *~
 .DS_Store

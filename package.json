@@ -4,6 +4,7 @@
   "description": "Utility to connect a headless Raspberry Pi to a Wifi Network",
   "main": "index.js",
   "scripts": {
+    "install-rc": "scripts/init-install.js",
     "test": "mocha"
   },
   "bin": {

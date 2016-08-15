@@ -15,12 +15,14 @@ function getWifiInfo(file) {
     info = require(file);
     if (modName) delete require.cache[modName];
   } catch (e) {
+    console.error(e);
     try {
       info = {};
       var lines = fs.readFileSync(file).toString().split('\n');
       info.ssid = lines[0];
       info.password = lines[1];
     } catch (e) {
+      console.error(e);
       throw new Error('Unable to read config file');
     }
   }
@@ -111,6 +113,8 @@ function main() {
   });
 }
 
-if (!module.parent) {
+if (process.argv[2] === 'install') {
+  require('./scripts/init-install.js');
+} else if (!module.parent) {
   main();
 }
