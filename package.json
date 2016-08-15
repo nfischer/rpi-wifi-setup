@@ -1,6 +1,6 @@
 {
   "name": "rpi-wifi-setup",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Utility to connect a headless Raspberry Pi to a Wifi Network",
   "main": "index.js",
   "scripts": {
@@ -23,8 +23,7 @@
     "url": "git://github.com/nfischer/rpi-wifi-setup.git"
   },
   "license": "MIT",
-  "dependencies": {
-  },
+  "dependencies": {},
   "files": [
     "index.js"
   ],
