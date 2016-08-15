@@ -1,6 +1,6 @@
 {
   "name": "rpi-wifi-setup",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Utility to connect a headless Raspberry Pi to a Wifi Network",
   "main": "index.js",
   "scripts": {
